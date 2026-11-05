@@ -41,8 +41,8 @@ function TripPlan() {
         }
 
         const tripData = {
-            fromLocation: trip.from || "Home",
-            destination: trip.destination,
+            fromLocation: (trip.from && trip.from.trim()) ? trip.from.trim() : "Chennai",
+            destination: trip.destination.trim(),
             startDate: trip.startDate,
             endDate: trip.endDate,
             travellers: Number(trip.travellers) || 1,
@@ -85,16 +85,33 @@ function TripPlan() {
                                 <form onSubmit={planTrip}>
                                     <div className="row g-3 mb-3">
                                         <div className="col-md-6">
-                                            <label className="form-label fw-bold">Starting Location</label>
+                                            <label className="form-label fw-bold d-flex justify-content-between align-items-center">
+                                                <span>📍 Starting Location</span>
+                                                <small className="text-muted fw-normal">Route map begins here</small>
+                                            </label>
                                             <input
                                                 type="text"
                                                 className="form-control form-control-lg"
                                                 name="from"
-                                                placeholder="e.g. Bangalore, Delhi..."
+                                                placeholder="e.g. Chennai, Coimbatore, Bangalore, Mumbai..."
                                                 value={trip.from}
                                                 onChange={handleChange}
                                                 required
                                             />
+                                            <div className="d-flex flex-wrap gap-1 mt-2">
+                                                <span className="small text-muted me-1 align-self-center">Quick pick:</span>
+                                                {["Chennai", "Coimbatore", "Bengaluru", "Madurai", "Trichy", "Mumbai"].map((city) => (
+                                                    <button
+                                                        key={city}
+                                                        type="button"
+                                                        className="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill"
+                                                        style={{ fontSize: "0.75rem" }}
+                                                        onClick={() => setTrip({ ...trip, from: city })}
+                                                    >
+                                                        {city}
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
 
                                         <div className="col-md-6">

@@ -22,9 +22,11 @@ export default function AiTripPlanner() {
     const [searchParams] = useSearchParams();
     const destParam = searchParams.get("destination");
 
-    // Form Inputs
+    const localUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+    // Form Inputs - starting location is entered by user (not hardcoded to Delhi)
     const [formData, setFormData] = useState({
-        startingLocation: "Delhi",
+        startingLocation: localUser?.city || localUser?.location || "",
         destination: destParam || "Goa",
         destinationsList: destParam ? [destParam] : ["Goa"],
         startDate: new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0],
@@ -262,8 +264,9 @@ export default function AiTripPlanner() {
                     <form onSubmit={handleGenerate}>
                         <div className="row g-3">
                             <div className="col-md-6">
-                                <label className="form-label fw-bold text-dark">
-                                    📍 Starting Location / City
+                                <label className="form-label fw-bold text-dark d-flex justify-content-between align-items-center">
+                                    <span>📍 Starting Location / City</span>
+                                    <small className="text-muted fw-normal">Map route begins here</small>
                                 </label>
                                 <input
                                     type="text"
@@ -271,9 +274,23 @@ export default function AiTripPlanner() {
                                     name="startingLocation"
                                     value={formData.startingLocation}
                                     onChange={handleInputChange}
-                                    placeholder="e.g., Delhi, Mumbai, Bangalore, Chennai"
+                                    placeholder="Enter your city (e.g., Chennai, Coimbatore, Bengaluru, Mumbai...)"
                                     required
                                 />
+                                <div className="d-flex flex-wrap gap-1 mt-2">
+                                    <span className="small text-muted me-1 align-self-center">Quick pick:</span>
+                                    {["Chennai", "Coimbatore", "Bengaluru", "Madurai", "Trichy", "Mumbai", "Kochi"].map((city) => (
+                                        <button
+                                            key={city}
+                                            type="button"
+                                            className="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill small"
+                                            style={{ fontSize: "0.75rem" }}
+                                            onClick={() => setFormData({ ...formData, startingLocation: city })}
+                                        >
+                                            {city}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
 
                             <div className="col-md-6">

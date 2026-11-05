@@ -1,32 +1,27 @@
-﻿# âœˆï¸ TripNest: Travel Planning & Trip Management Platform
+# ✈️ TripNest: Travel Planning & Trip Management Platform
 
-A full-stack travel platform built with **React.js + Vite** and **Spring Boot 3 + MySQL**.
-
----
-
-## ðŸš€ Quick Start (1-Click Run)
-
-Simply double-click the launcher script in this folder:
-- **`start-tripnest.bat`** âž” Starts MySQL, starts the Backend (port 8081), starts the Frontend (port 5173), and automatically opens `http://localhost:5173` in your browser!
-- **`stop-tripnest.bat`** âž” Gracefully stops both servers when you are finished.
+A full-stack travel platform built with **React.js + Vite** and **Spring Boot 3 + PostgreSQL**.
 
 ---
 
-## ðŸ› ï¸ Manual Run Instructions
+## 🛠️ How to Run via Command Prompt
 
-If you prefer running via separate Command Prompt / PowerShell terminals:
+Run the project using two separate Command Prompt (`cmd`) windows:
 
-### 1. Ensure MySQL is Running
-Make sure your MySQL service (`MySQL80`) is running. You can check or start it via Command Prompt (as Admin):
+### 1. Ensure PostgreSQL is Running
+Make sure your PostgreSQL service (`postgresql-x64-18`) is active:
 ```cmd
-net start MySQL80
+net start postgresql-x64-18
 ```
-Database configured: `tripnest` (Username: `root`, Password: `Saki@123`).
+- **Database**: `tripnest`
+- **Host**: `localhost:5432`
+- **Username**: `postgres`
+- **Password**: `Saki@123`
 
 ### 2. Start the Spring Boot Backend (Port 8081)
 Open a terminal in `tripnest-backend`:
 ```cmd
-cd "c:\Users\Sakanasri S\OneDrive\Desktop\tripnest final\tripnest-backend"
+cd tripnest-backend
 .\mvnw.cmd spring-boot:run
 ```
 *Wait until you see `Started TripnestApplication in ... seconds`.*
@@ -34,7 +29,7 @@ cd "c:\Users\Sakanasri S\OneDrive\Desktop\tripnest final\tripnest-backend"
 ### 3. Start the React Frontend (Port 5173)
 Open a second terminal in `tripnest-frontend`:
 ```cmd
-cd "c:\Users\Sakanasri S\OneDrive\Desktop\tripnest final\tripnest-frontend"
+cd tripnest-frontend
 npm.cmd run dev
 ```
 *Vite will start at `http://localhost:5173`.*
@@ -44,20 +39,20 @@ Visit **[http://localhost:5173](http://localhost:5173)** in Chrome, Edge, or Fir
 
 ---
 
-## ðŸ”‘ Login Accounts
+## 🔑 Login Accounts
 
 | Role | Email | Password | Access Highlights |
 | :--- | :--- | :--- | :--- |
-| **Administrator** | `admin@tripnest.com` | `Admin@123` | Full access to ðŸ›¡ï¸ **Admin Center**, platform metrics, user role management, destination catalog controls |
+| **Administrator** | `admin@tripnest.com` | `Admin@123` | Full access to 🛡️ **Admin Center**, platform metrics, user role management, destination catalog controls |
+| **Administrator (Personal)** | `sakanasri07@gmail.com` | *(Your registered password)* | Full admin access and traveler trip management |
 | **Traveler (Google)** | 1-Click Button | *None required* | Instant one-click Google OAuth demo traveler |
-| **Traveler (User)** | `sakanasri07@gmail.com` | *Your password* | Full access to trips, day-wise itineraries, expense splitting, and chat |
 
 ---
 
-## ðŸ“‹ Features & Milestone Checklist
+## 📋 Features & Milestone Checklist
 
-- **Milestone 1**: JWT & OAuth2 login, Password recovery, Role-Based Access (`ROLE_TRAVELER`, `ROLE_GROUP_ADMIN`, `ROLE_ADMIN`), User Profile & Travel Preferences.
+- **Milestone 1**: JWT & OAuth2 login, Password recovery, Role-Based Access (`ROLE_TRAVELER`, `ROLE_ADMIN`), User Profile & Travel Preferences.
 - **Milestone 2**: Trip creation, Day-wise itinerary planning, Interactive Leaflet GPS route map, Activity scheduling (Sightseeing, Transport, Hotel, Dining, Adventure, Shopping), Live Weather forecast widget & Travel guides.
 - **Milestone 3**: Budget utilization tracking, Over-budget warning alerts, Group collaboration (Invite companions by email), In-app real-time group chat, Group expense splitting & "Mark as Settled" toggle, Centralized travel documents vault (tickets, hotel vouchers, passport/ID, photos).
 - **Milestone 4**: Traveler Analytics Dashboard with Chart.js charts (Budget vs Actual spend, Category doughnut distribution), System Admin Dashboard with platform KPIs, user role assignment, and destination catalog management.
-
+- **AI Features**: AI Trip Planner, AI Budget Estimator, AI Destination Recommendations, Document Assistant (with intelligent built-in fallback and Gemini API support).

@@ -56,7 +56,10 @@ export default function InteractiveRouteMap({ stops = [], initialMode = "driving
         if (!mapContainerRef.current) return;
 
         if (!mapInstanceRef.current) {
-            const map = L.map(mapContainerRef.current).setView([20.5937, 78.9629], 5);
+            const startCenter = (stops && stops.length > 0 && stops[0].latitude)
+                ? [stops[0].latitude, stops[0].longitude]
+                : [13.0827, 80.2707];
+            const map = L.map(mapContainerRef.current).setView(startCenter, 6);
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 19,

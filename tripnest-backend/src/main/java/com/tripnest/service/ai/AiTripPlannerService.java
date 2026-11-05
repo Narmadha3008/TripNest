@@ -189,8 +189,9 @@ public class AiTripPlannerService {
         List<DayItineraryDto> daysList = new ArrayList<>();
         List<RouteStopDto> routeStops = new ArrayList<>();
 
-        // Add origin stop
-        double[] originCoords = knowledgeBaseService.getCoordinates(startLoc, new double[]{28.6139, 77.2090});
+        // Add origin stop from entered location
+        double[] destFallback = knowledgeBaseService.getCoordinates(dests.get(0), new double[]{13.0827, 80.2707});
+        double[] originCoords = knowledgeBaseService.getCoordinates(startLoc, destFallback);
         routeStops.add(new RouteStopDto(startLoc, originCoords[0], originCoords[1], "origin", 0));
 
         int stopIdx = 1;
@@ -293,7 +294,8 @@ public class AiTripPlannerService {
         List<DayItineraryDto> daysList = new ArrayList<>();
         List<RouteStopDto> routeStops = new ArrayList<>();
 
-        double[] originCoords = knowledgeBaseService.getCoordinates(startLoc, new double[]{28.6139, 77.2090});
+        double[] destFallback = knowledgeBaseService.getCoordinates(primaryDest, new double[]{13.0827, 80.2707});
+        double[] originCoords = knowledgeBaseService.getCoordinates(startLoc, destFallback);
         routeStops.add(new RouteStopDto(startLoc, originCoords[0], originCoords[1], "origin", 0));
 
         LocalDate currentLocalDate = LocalDate.parse(startDt);

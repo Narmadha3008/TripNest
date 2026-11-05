@@ -5,6 +5,7 @@ import API from "../services/api";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import "../styles/TripPlan.css";
+import { getCoordinatesSync, resolveCoordinatesAsync } from "../utils/geoUtils";
 
 // Chart.js
 import {
@@ -29,36 +30,8 @@ L.Icon.Default.mergeOptions({
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// City Coordinates Dictionary for Interactive Route Map
-const CITY_COORDS = {
-    Goa: [15.2993, 74.1240],
-    Ooty: [11.4102, 76.6950],
-    Manali: [32.2432, 77.1892],
-    "Kerala Backwaters": [9.4981, 76.3388],
-    Kerala: [9.4981, 76.3388],
-    Jaipur: [26.9124, 75.7873],
-    Ladakh: [34.1526, 77.5771],
-    Delhi: [28.6139, 77.2090],
-    Mumbai: [19.0760, 72.8777],
-    Bangalore: [12.9716, 77.5946],
-    Bengaluru: [12.9716, 77.5946],
-    Chennai: [13.0827, 80.2707],
-    Kolkata: [22.5726, 88.3639],
-    Hyderabad: [17.3850, 78.4867],
-    Pune: [18.5204, 73.8567],
-    Shimla: [31.1048, 77.1734],
-    Agra: [27.1767, 78.0081],
-    Varanasi: [25.3176, 82.9739],
-};
-
-function getCoordinates(cityName, fallback = [20.5937, 78.9629]) {
-    if (!cityName) return fallback;
-    for (const [key, coords] of Object.entries(CITY_COORDS)) {
-        if (cityName.toLowerCase().includes(key.toLowerCase())) {
-            return coords;
-        }
-    }
-    return fallback;
+function getCoordinates(cityName, fallback = null) {
+    return getCoordinatesSync(cityName, fallback);
 }
 
 function TripDetailsPage() {
@@ -488,13 +461,32 @@ function TripDetailsPage() {
         ],
     };
 
-    // Coordinates for Route Map
-    const originCoords = getCoordinates(trip?.fromLocation, [28.6139, 77.2090]);
-    const destCoords = getCoordinates(trip?.destination, [15.2993, 74.1240]);
+    // Dynamic Coordinates for Route Map - resolves to the entered starting location
+    const [resolvedOrigin, setResolvedOrigin] = useState(null);
+    const [resolvedDest, setResolvedDest] = useState(null);
+
+    useEffect(() => {
+        if (!trip) return;
+        let isMounted = true;
+        if (trip.fromLocation) {
+            resolveCoordinatesAsync(trip.fromLocation, [13.0827, 80.2707]).then((coords) => {
+                if (isMounted) setResolvedOrigin(coords);
+            });
+        }
+        if (trip.destination) {
+            resolveCoordinatesAsync(trip.destination, [15.2993, 74.1240]).then((coords) => {
+                if (isMounted) setResolvedDest(coords);
+            });
+        }
+        return () => { isMounted = false; };
+    }, [trip?.fromLocation, trip?.destination]);
+
+    const originCoords = resolvedOrigin || getCoordinatesSync(trip?.fromLocation, [13.0827, 80.2707]);
+    const destCoords = resolvedDest || getCoordinatesSync(trip?.destination, [15.2993, 74.1240]);
     const mapStops = [
         { name: trip?.fromLocation || "Origin", latitude: originCoords[0], longitude: originCoords[1], stopType: "origin" },
         ...itineraries.map((it, idx) => {
-            const c = getCoordinates(it.location || it.activity, destCoords);
+            const c = getCoordinatesSync(it.location || it.activity, destCoords);
             return {
                 name: `${it.activity} (${it.location || trip?.destination})`,
                 latitude: c[0],
